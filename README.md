@@ -1,3 +1,5 @@
+Click [HERE](http://sergeydus.github.io/image-color-sort/) to see it
+<br/>
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
