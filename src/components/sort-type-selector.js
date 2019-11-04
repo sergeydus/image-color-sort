@@ -7,47 +7,54 @@ import Button from 'react-bootstrap/Button';
 export default function SortTypeSelector(props) {
     console.log(' sort type-rerendered');
     return (
-        <div style={{textAlign:'left'}}>
+        <div style={{ textAlign: 'left' }}>
             Sort Algorithm:
             <ul >
                 <li>
-                    <input type='radio' name="SortRadio" />Bubble Sort
+                    <input type='radio' name="SortRadio" checked={props.sortAlgorithm === 0} onChange={() => { props.SetSortAlgorithm(0) }} />Bubble Sort
                 </li>
                 <li>
-                    <input type='radio' name="SortRadio"/>Insertion Sort
+                    <input type='radio' name="SortRadio" checked={props.sortAlgorithm === 1} onChange={() => { props.SetSortAlgorithm(1) }} />Insertion Sort
                 </li>
                 <li>
-                    <input type='radio' name="SortRadio"/>PlaceHolder
+                    <input type='radio' name="SortRadio" checked={props.sortAlgorithm === 2} disabled onChange={() => { props.SetSortAlgorithm(2) }} />PlaceHolder
                 </li>
                 <li>
-                    <input type='radio' name="SortRadio"/>PlaceHolder
+                    <input type='radio' name="SortRadio" checked={props.sortAlgorithm === 3} disabled onChange={() => { props.SetSortAlgorithm(3) }} />PlaceHolder
                 </li>
             </ul>
             Sort Direction:
-            <ul style={{textAlign:'left'}} onChange={(e)=>console.log(e.target)}>
+            <ul style={{ textAlign: 'left' }} onChange={(e) => console.log(e.target)}>
                 <li>
-                    <input type='radio' name="SortTypeRadio" value=""  checked={props.sortDirection===0} onChange={()=>{props.setSortDirection(0)}}/>By Row
+                    <input type='radio' name="SortTypeRadio" value="" checked={props.sortDirection === 0} onChange={() => { props.setSortDirection(0) }} />By Row
                 </li>
                 <li>
-                    <input type='radio' name="SortTypeRadio" value="" checked={props.sortDirection===1} onChange={()=>{props.setSortDirection(1)}}/>By Column
+                    <input type='radio' name="SortTypeRadio" value="" checked={props.sortDirection === 1} onChange={() => { props.setSortDirection(1) }} />By Column
                 </li>
                 <li>
-                    <input type='radio' name="SortTypeRadio" value="" checked={props.sortDirection===2} onChange={()=>{props.setSortDirection(2)}}/>Both (N^N)
+                    <input type='radio' name="SortTypeRadio" value="" checked={props.sortDirection === 2} onChange={() => { props.setSortDirection(2) }} />Both (N^N)
                 </li>
             </ul>
             Sort By:
             <ul >
                 <li>
-                    <input type='radio' name="SortByRadio" />Hue
+                    <label className="radio">
+                        <input type='radio' name="SortByRadio" checked="checked" />Hue
+                    </label>
                 </li>
                 <li>
-                    <input type='radio' name="SortByRadio"/>Proximity
+                    <label className="radio">
+                        <input type='radio' name="SortByRadio" disabled />Proximity
+                    </label>
                 </li>
                 <li>
-                    <input type='radio' name="SortByRadio"/>RGB
+                    <label className="radio">
+
+                        <input type='radio' name="SortByRadio" disabled />RGB
+                    </label>
                 </li>
             </ul>
-            
+
         </div>
     );
 }

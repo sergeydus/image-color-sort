@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import SortTypeSelector from '../components/sort-type-selector';
-import { SortByHue, SortByHueByRow, Sort, RandomizeCanvas, CancelSort, SortByHueByCol } from '../functions'
+import { SortByHue, SortByHueByRow, Sort, RandomizeCanvas, CancelSort, SortByHueByCol, InsertionSortByHueByRow, InsertionSortByHueByCol, InsertionSortByHue } from '../functions'
 function Home() {
     const canvasRef = useRef(null);
     var colorArray = [];
@@ -24,19 +24,42 @@ function Home() {
         console.log('rerender, issortrunning=', isSortRunning, 'sortdirection:', sortDirection, 'sortalgorithm:', sortAlgorithm);
     });
     function StartSort() {
-        switch (sortDirection) {
+
+        switch (sortAlgorithm) {
             case 0:
-                Sort(SortByHueByRow, sortSpeed, canvasRef, setSortRunning);
+                switch (sortDirection) {
+                    case 0:
+                        Sort(SortByHueByRow, sortSpeed, canvasRef, setSortRunning);
+                        break;
+                    case 1:
+                        Sort(SortByHueByCol, sortSpeed, canvasRef, setSortRunning);
+                        break;
+                    case 2:
+                        Sort(SortByHue, sortSpeed, canvasRef, setSortRunning);
+                        break;
+                    default:
+                        Sort(SortByHueByRow, sortSpeed, canvasRef, setSortRunning);
+                }
                 break;
             case 1:
-                Sort(SortByHueByCol, sortSpeed, canvasRef, setSortRunning);
-                break;
-            case 2:
-                Sort(SortByHue, sortSpeed, canvasRef, setSortRunning);
+                switch (sortDirection) {
+                    case 0:
+                        Sort(InsertionSortByHueByRow, sortSpeed, canvasRef, setSortRunning);
+                        break;
+                    case 1:
+                        Sort(InsertionSortByHueByCol, sortSpeed, canvasRef, setSortRunning);
+                        break;
+                    case 2:
+                        Sort(InsertionSortByHue, sortSpeed, canvasRef, setSortRunning);
+                        break;
+                    default:
+                        Sort(InsertionSortByHueByRow, sortSpeed, canvasRef, setSortRunning);
+                }
                 break;
             default:
-                Sort(SortByHueByRow, sortSpeed, canvasRef, setSortRunning);
+                break;
         }
+
     }
     return (
         <div>
@@ -53,14 +76,23 @@ function Home() {
                 </Row>
                 <Row>
                     <Col xs={8}>
-                        <canvas ref={canvasRef} height={350} width={350}></canvas>
+                        <canvas ref={canvasRef} height={150} width={150}></canvas>
                     </Col>
                     <SortTypeSelector setSortDirection={setSortDirection} SetSortAlgorithm={SetSortAlgorithm} sortDirection={sortDirection} sortAlgorithm={sortAlgorithm} />
 
                 </Row>
                 <Row>
                     <Col>
-                        <Button onClick={() => RandomizeCanvas(canvasRef)}>Randomize canvas</Button>
+                        <Button onClick={() => {
+                            RandomizeCanvas(canvasRef);
+                            // // http://www.deepdiveintel.com/wp-content/uploads/2013/09/Owl-Eye-art-300x300.jpg
+                            // var ctx = canvasRef.current.getContext('2d');
+                            // var img = new Image();
+                            // img.onload = function () {
+                            //     ctx.drawImage(img, 0, 0); // Or at whatever offset you like
+                            // };
+                            // img.src = 'Owl-Eye-art-300x300.jpg';
+                        }}>Randomize canvas</Button>
                     </Col>
                 </Row>
                 <Row>
