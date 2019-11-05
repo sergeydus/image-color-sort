@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f8b5690d6c2abd65efd7ae70aff0037e",
+    "revision": "afc6fc5aa9f526c9aef52e29dfd0033d",
     "url": "/image-color-sort/index.html"
   },
   {
-    "revision": "e1a193e55487ec922c09",
+    "revision": "387f1c4a541273f0d06a",
     "url": "/image-color-sort/static/css/2.0624914a.chunk.css"
   },
   {
-    "revision": "b205e50d94d9db899c2c",
+    "revision": "a351ef4096ad52377e77",
     "url": "/image-color-sort/static/css/main.4dddb4fa.chunk.css"
   },
   {
-    "revision": "e1a193e55487ec922c09",
-    "url": "/image-color-sort/static/js/2.c4b3007e.chunk.js"
+    "revision": "387f1c4a541273f0d06a",
+    "url": "/image-color-sort/static/js/2.a3fc8050.chunk.js"
   },
   {
-    "revision": "b205e50d94d9db899c2c",
-    "url": "/image-color-sort/static/js/main.77bcad30.chunk.js"
+    "revision": "a351ef4096ad52377e77",
+    "url": "/image-color-sort/static/js/main.336c7c52.chunk.js"
   },
   {
     "revision": "f7f6bf312e505a2d9456",
