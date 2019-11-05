@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { SortByHue, SortByHueByRow, Sort, RandomizeCanvas, CancelSort, SortByHueByCol, InsertionSortByHueByRow, InsertionSortByHueByCol, InsertionSortByHue } from '../functions'
+import { SortByHue, SortByHueByRow, Sort, RandomizeCanvas, CancelSort, SortByHueByCol, InsertionSortByHueByRow, InsertionSortByHueByCol, InsertionSortByHue,SortByHueSKIP } from '../functions'
 
 export default function SortTypeSelector(props) {
     let canvasRef = props.canvasRef;
@@ -138,7 +138,7 @@ export default function SortTypeSelector(props) {
                     </div>
                 ) : (<></>)}
                 <Button variant="warning" className='btn-block' onClick={() => RandomizeCanvas(canvasRef)}>Randomize Canvas</Button>
-                <Button variant='outline-primary' className='btn-block'>Upload Image</Button>
+                <Button disabled variant='outline-primary' className='btn-block'>Upload Image</Button>
             </div>
 
         </div>

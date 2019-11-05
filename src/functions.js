@@ -29,13 +29,13 @@ function GetCanvasHues(canvasRef, byLine = false, ByRow = true) {
     } else {
         if (ByRow) {
 
-            for (let i = 0; i < cw; i++) {
+            for (let i = 0; i < ch; i++) {
                 let theseHues = [];
-                for (let j = 0; j < ch; j++) {
+                for (let j = 0; j < cw; j++) {
                     // Get RGB data
-                    let r = imgData.data[4 * (i * ch + j) + 0]
-                    let g = imgData.data[4 * (i * ch + j) + 1]
-                    let b = imgData.data[4 * (i * ch + j) + 2]
+                    let r = imgData.data[4 * (i * cw + j) + 0]
+                    let g = imgData.data[4 * (i * cw + j) + 1]
+                    let b = imgData.data[4 * (i * cw + j) + 2]
                     // let a = imgData.data[4 * (i * ch + j) + 3]
                     // Get HSV from RGB
                     let hsv = rgbToHsl([r, g, b]);
@@ -48,15 +48,16 @@ function GetCanvasHues(canvasRef, byLine = false, ByRow = true) {
                 }
                 hues.push(theseHues);
             }
+            console.log(hues);
         } else {
             for (let i = 0; i < cw; i++) {
                 let theseHues = [];
                 for (let j = 0; j < ch; j++) {
                     // Get RGB data
                     // console.log( 4* (j * cw + i));
-                    let r = imgData.data[4 * (j * cw + i) + 0]
-                    let g = imgData.data[4 * (j * cw + i) + 1]
-                    let b = imgData.data[4 * (j * cw + i) + 2]
+                    let r = imgData.data[4 * (j * cw + i) + 0];
+                    let g = imgData.data[4 * (j * cw + i) + 1];
+                    let b = imgData.data[4 * (j * cw + i) + 2];
                     // let a = imgData.data[4 * (i * ch + j) + 3]
                     // Get HSV from RGB
                     let hsv = rgbToHsl([r, g, b]);
@@ -120,6 +121,52 @@ function SortByHue(canvasRef, isSortRunningCallBack) {
     }
 }
 
+function SortByHueSKIP(canvasRef, isSortRunningCallBack) {
+    console.log('SKIP');
+    const canvas = canvasRef.current;
+    let cw = canvas.width,
+        ch = canvas.height;
+    const ctx = canvas.getContext('2d');
+    let imgData = ctx.getImageData(0, 0, cw, ch);
+    let pix = imgData.data;
+    // let pixString = JSON.stringify(pix);
+    let hues = [];
+    // Get all hues
+    hues = GetCanvasHues(canvasRef, false);
+    // 'Bubble sort' hues in image data
+    for (let j = 0; j < hues.length; j++)
+        for (let i = 1; i < hues.length; i++) {
+            if (hues[i] < hues[i - 1]) {
+
+                // Swap pixels in actual imgData model
+                let temp=hues[i];
+                hues[i] = hues[i - 1];
+                hues[i-1]=temp;
+                let r = pix[4 * i + 0];
+                let g = pix[4 * i + 1];
+                let b = pix[4 * i + 2];
+                let a = pix[4 * i + 3];
+
+                pix[4 * i + 0] = pix[4 * (i - 1) + 0];
+                pix[4 * i + 1] = pix[4 * (i - 1) + 1];
+                pix[4 * i + 2] = pix[4 * (i - 1) + 2];
+                pix[4 * i + 3] = pix[4 * (i - 1) + 3];
+
+                pix[4 * (i - 1) + 0] = r;
+                pix[4 * (i - 1) + 1] = g;
+                pix[4 * (i - 1) + 2] = b;
+                pix[4 * (i - 1) + 3] = a;
+
+            }
+
+        }
+    // Put image data back to canvas
+    ctx.putImageData(imgData, 0, 0);
+    clearInterval(timerId);
+    isSortRunningCallBack(false);
+
+}
+
 function SortByHueByRow(canvasRef, isSortRunningCallBack) {
     const canvas = canvasRef.current;
     let cw = canvas.width,
@@ -179,6 +226,7 @@ function SortByHueByCol(canvasRef, isSortRunningCallBack) {
     // Get all hues
     hues = GetCanvasHues(canvasRef, true, false);
     // 'Bubble sort' hues in image data
+    console.log(hues);
     for (let i = 0; i < hues.length; i++) {
         // console.log(i);
         for (let j = 1; j < hues[i].length; j++) {
@@ -187,20 +235,20 @@ function SortByHueByCol(canvasRef, isSortRunningCallBack) {
 
                 // Swap pixels in actual imgData model
 
-                let r = pix[4 * (j * hues[0].length + i) + 0];
-                let g = pix[4 * (j * hues[0].length + i) + 1];
-                let b = pix[4 * (j * hues[0].length + i) + 2];
-                let a = pix[4 * (j * hues[0].length + i) + 3];
+                let r = pix[4 * (j * hues.length + i) + 0];
+                let g = pix[4 * (j * hues.length + i) + 1];
+                let b = pix[4 * (j * hues.length + i) + 2];
+                let a = pix[4 * (j * hues.length + i) + 3];
 
-                pix[4 * (j * hues[0].length + i) + 0] = pix[4 * ((j - 1) * hues[0].length + i) + 0];
-                pix[4 * (j * hues[0].length + i) + 1] = pix[4 * ((j - 1) * hues[0].length + i) + 1];
-                pix[4 * (j * hues[0].length + i) + 2] = pix[4 * ((j - 1) * hues[0].length + i) + 2];
-                pix[4 * (j * hues[0].length + i) + 3] = pix[4 * ((j - 1) * hues[0].length + i) + 3];
+                pix[4 * (j *hues.length+ i) + 0] = pix[4 * ((j - 1) * hues.length + i) + 0];
+                pix[4 * (j *hues.length+ i) + 1] = pix[4 * ((j - 1) * hues.length + i) + 1];
+                pix[4 * (j *hues.length+ i) + 2] = pix[4 * ((j - 1) * hues.length + i) + 2];
+                pix[4 * (j *hues.length+ i) + 3] = pix[4 * ((j - 1) * hues.length + i) + 3];
 
-                pix[4 * ((j - 1) * hues[0].length + i) + 0] = r;
-                pix[4 * ((j - 1) * hues[0].length + i) + 1] = g;
-                pix[4 * ((j - 1) * hues[0].length + i) + 2] = b;
-                pix[4 * ((j - 1) * hues[0].length + i) + 3] = a;
+                pix[4 * ((j - 1) * hues.length + i) + 0] = r;
+                pix[4 * ((j - 1) * hues.length + i) + 1] = g;
+                pix[4 * ((j - 1) * hues.length + i) + 2] = b;
+                pix[4 * ((j - 1) * hues.length + i) + 3] = a;
 
             }
         }
@@ -279,24 +327,24 @@ function InsertionSortByHueByCol(canvasRef, isSortRunningCallBack) {
     let hues = [];
     let hasChanged = false;
     // Get all hues
-    hues = GetCanvasHues(canvasRef, true);
+    hues = GetCanvasHues(canvasRef, true,false);
     // 'Bubble sort' hues in image data
     for (let i = 0; i < hues.length; i++) {
-        // console.log(i);
-        let length = hues.length;
+        console.log(hues.length,hues[0].length+'!@#@!');
+        let length = hues[0].length;
         for (let j = 1; j < length; j++) {
             let shouldBreak = false;
-            let key = hues[j][i];
+            let key = hues[i][j];
             let r = pix[4 * (j * hues.length + i) + 0];
             let g = pix[4 * (j * hues.length + i) + 1];
             let b = pix[4 * (j * hues.length + i) + 2];
             let a = pix[4 * (j * hues.length + i) + 3];
 
             let k = j - 1;
-            while (k >= 0 && hues[k][i] > key) {
+            while (k >= 0 && hues[i][k] > key) {
                 hasChanged = true;
                 shouldBreak = true;
-                hues[k + 1][i] = hues[k][i];
+                hues[i][k + 1] = hues[i][k];
                 pix[4 * ((k + 1) * hues.length + i) + 0] = pix[4 * (k * hues.length + i) + 0];
                 pix[4 * ((k + 1) * hues.length + i) + 1] = pix[4 * (k * hues.length + i) + 1];
                 pix[4 * ((k + 1) * hues.length + i) + 2] = pix[4 * (k * hues.length + i) + 2];
@@ -305,7 +353,7 @@ function InsertionSortByHueByCol(canvasRef, isSortRunningCallBack) {
 
                 k = k - 1;
             }
-            hues[k + 1][i] = key;
+            hues[i][k + 1] = key;
 
             pix[4 * ((k + 1) * hues.length + i) + 0] = r;
             pix[4 * ((k + 1) * hues.length + i) + 1] = g;
@@ -337,34 +385,34 @@ function InsertionSortByHue(canvasRef, isSortRunningCallBack) {
     hues = GetCanvasHues(canvasRef, false);
     // 'Bubble sort' hues in image data
     for (let i = 1; i < hues.length; i++) {
-            let shouldBreak = false;
-            let key = hues[i];
-            let r = pix[4 * (i) + 0];
-            let g = pix[4 * (i) + 1];
-            let b = pix[4 * (i) + 2];
-            let a = pix[4 * (i) + 3];
+        let shouldBreak = false;
+        let key = hues[i];
+        let r = pix[4 * (i) + 0];
+        let g = pix[4 * (i) + 1];
+        let b = pix[4 * (i) + 2];
+        let a = pix[4 * (i) + 3];
 
-            let k = i - 1;
-            while (k >= 0 && hues[k] > key) {
-                hasChanged = true;
-                shouldBreak = true;
-                hues[k + 1] = hues[k];
-                pix[4 * ((k + 1) ) + 0] = pix[4 * (k) + 0];
-                pix[4 * ((k + 1) ) + 1] = pix[4 * (k) + 1];
-                pix[4 * ((k + 1) ) + 2] = pix[4 * (k) + 2];
-                pix[4 * ((k + 1) ) + 3] = pix[4 * (k) + 3];
+        let k = i - 1;
+        while (k >= 0 && hues[k] > key) {
+            hasChanged = true;
+            shouldBreak = true;
+            hues[k + 1] = hues[k];
+            pix[4 * ((k + 1)) + 0] = pix[4 * (k) + 0];
+            pix[4 * ((k + 1)) + 1] = pix[4 * (k) + 1];
+            pix[4 * ((k + 1)) + 2] = pix[4 * (k) + 2];
+            pix[4 * ((k + 1)) + 3] = pix[4 * (k) + 3];
 
 
-                k = k - 1;
-            }
-            hues[k + 1] = key;
+            k = k - 1;
+        }
+        hues[k + 1] = key;
 
-            pix[4 * ((k + 1) ) + 0] = r;
-            pix[4 * ((k + 1) ) + 1] = g;
-            pix[4 * ((k + 1) ) + 2] = b;
-            pix[4 * ((k + 1) ) + 3] = a;
-            if (shouldBreak)
-                break;
+        pix[4 * ((k + 1)) + 0] = r;
+        pix[4 * ((k + 1)) + 1] = g;
+        pix[4 * ((k + 1)) + 2] = b;
+        pix[4 * ((k + 1)) + 3] = a;
+        if (shouldBreak)
+            break;
     }
     // Put image data back to canvas
     ctx.putImageData(imgData, 0, 0);
@@ -419,9 +467,10 @@ function RandomizeCanvas(canvasRef) {
         for (let width = canvas.width, j = 0; j < width; j++) {
             ctx.fillStyle = `hsla(${Math.random() * 360}, 100%, 50%, 1)`;
             // ctx.fillStyle =`hsla(${Math.random() * 360}, ${Math.random()*100}%, ${Math.random()*100}%, ${Math.random()})`
-            ctx.fillRect(i, j, 1, 1)
+            ctx.fillRect(j, i, 1, 1);
         }
     }
+    console.log(canvas.width,canvas.height);
 }
 
 function Sort(sortfunc, interval, canvasRef, setSortRunning) {
@@ -439,6 +488,7 @@ function CancelSort(setSortRunning) {
     }
 }
 export {
+    SortByHueSKIP,
     SortByHue,
     SortByHueByRow,
     SortByHueByCol,

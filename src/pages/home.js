@@ -18,7 +18,7 @@ function Home() {
                 </Row>
                 <Row>
                     <Col sm={12} md={8}>
-                        <canvas ref={canvasRef} height={450} width={450}></canvas>
+                        <canvas ref={canvasRef} height={300} width={200}></canvas>
                     </Col>
                     <Col sm={12} md={4}>
                         <SortTypeSelector canvasRef={canvasRef} />
