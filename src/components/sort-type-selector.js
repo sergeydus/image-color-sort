@@ -5,13 +5,14 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { SortByHue, SortByHueByRow, Sort, RandomizeCanvas, CancelSort, SortByHueByCol, InsertionSortByHueByRow, InsertionSortByHueByCol, InsertionSortByHue,SortByHueSKIP } from '../functions'
+import { SortByHue, SortByHueByRow, Sort, RandomizeCanvas, CancelSort, SortByHueByCol, InsertionSortByHueByRow, InsertionSortByHueByCol, InsertionSortByHue, SortByHueSKIP } from '../functions'
 
 export default function SortTypeSelector(props) {
     let canvasRef = props.canvasRef;
     console.log(canvasRef);
     console.log(' sort type-rerendered');
     const [isSortRunning, setSortRunning] = useState(false);
+    const [localImage, setlocalImage] = useState(null);
     const [sortSpeed, setSortSpeed] = useState(0);//from 0 to 100, 0 is fastest
     const [sortDirection, setSortDirection] = useState(0);//0-Row,1-Col,2-Both
     const [sortAlgorithm, SetSortAlgorithm] = useState(0);//0-bubblesort,1-insertion
@@ -138,7 +139,23 @@ export default function SortTypeSelector(props) {
                     </div>
                 ) : (<></>)}
                 <Button variant="warning" className='btn-block' onClick={() => RandomizeCanvas(canvasRef)}>Randomize Canvas</Button>
-                <Button disabled variant='outline-primary' className='btn-block'>Upload Image</Button>
+                {/* <Button type='file' variant='outline-primary' className='btn-block'>Upload Image</Button> */}
+                <input type="file" id="file_input" onChange={(e) => {
+                    const canvas = props.canvasRef.current;
+                    const ctx = canvas.getContext('2d');
+                    var URL = window.webkitURL || window.URL;
+                    var url = URL.createObjectURL(e.target.files[0]);
+                    var img = new Image();
+                    img.src = url;
+                    img.onload = function () {
+                        let img_width = img.width;
+                        let img_height = img.height;
+                        props.SetHeight(img_height);
+                        props.SetWidth(img_width);
+                        ctx.drawImage(img, 0, 0, img_width, img_height);
+
+                    }
+                }}></input>
             </div>
 
         </div>

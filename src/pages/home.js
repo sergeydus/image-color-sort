@@ -9,7 +9,8 @@ import SortTypeSelector from '../components/sort-type-selector';
 import { SortByHue, SortByHueByRow, Sort, RandomizeCanvas, CancelSort, SortByHueByCol, InsertionSortByHueByRow, InsertionSortByHueByCol, InsertionSortByHue } from '../functions'
 function Home() {
     const canvasRef = useRef(null);
-    // const [sortType, setSortType] = useState(BubbleSort);
+    const [height, SetHeight] = useState(300);
+    const [width, SetWidth] = useState(300);
     return (
         <div>
             <Container>
@@ -18,10 +19,10 @@ function Home() {
                 </Row>
                 <Row>
                     <Col sm={12} md={8}>
-                        <canvas ref={canvasRef} height={300} width={350}></canvas>
+                        <canvas ref={canvasRef} height={height} width={width}></canvas>
                     </Col>
                     <Col sm={12} md={4}>
-                        <SortTypeSelector canvasRef={canvasRef} />
+                        <SortTypeSelector canvasRef={canvasRef} SetHeight={SetHeight} SetWidth={SetWidth} />
                     </Col>
 
                 </Row>
