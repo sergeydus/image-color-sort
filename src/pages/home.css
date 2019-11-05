@@ -6,3 +6,26 @@ canvas{
 ul{
     list-style-type: none;
 }
+.button-container{
+    width: 12em;
+    /* background: pink; */
+}
+.input-container{
+    text-align: left;
+}
+@media(max-width: 767.98px) { 
+    .input-container{
+        /* text-align: left; */
+        border: 2px solid red;
+        padding:2em;
+        position: absolute;
+        left:50%;
+        text-align: left;
+        transform: translate(-50%, 0);
+    }
+    /* .input-container-item{
+        display: flex;
+        flex-direction: column;;
+        align-items: center;
+    } */
+ }

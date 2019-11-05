@@ -1,7 +1,3 @@
-import {
-    bigIntLiteral
-} from "@babel/types";
-
 var timerId = null;
 
 function GetCanvasHues(canvasRef, byLine = false, ByRow = true) {
